@@ -23,26 +23,25 @@ public class JobPosting {
     @JdbcTypeCode(SqlTypes.UUID)
     private UUID id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "employer_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "employer_id", nullable = false)
     private Employer employer;
 
-    @Column(name = "title", nullable = false)
+    @Column(nullable = false, length = 100)
     private String title;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT")
     private String description;
 
     @Column(name = "post_date")
     private LocalDate postDate;
 
-    @Column(name = "latitude", precision = 9, scale = 6)
+    @Column(precision = 9, scale = 6)
     private BigDecimal latitude;
 
-    @Column(name = "longitude", precision = 9, scale = 6)
+    @Column(precision = 9, scale = 6)
     private BigDecimal longitude;
 
-    @Column(name = "salary")
     private Integer salary;
 
     @Column(name = "is_remote")
@@ -51,7 +50,7 @@ public class JobPosting {
     @Column(name = "is_freelance")
     private Boolean isFreelance;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "job_posting_skill",
             joinColumns = @JoinColumn(name = "job_posting_id"),

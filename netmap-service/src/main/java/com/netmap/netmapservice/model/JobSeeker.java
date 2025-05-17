@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -20,7 +21,7 @@ public class JobSeeker {
     @JdbcTypeCode(SqlTypes.UUID)
     private UUID id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
 
@@ -31,12 +32,11 @@ public class JobSeeker {
     @Column(name = "experience_years")
     private Integer experienceYears;
 
-    public enum EducationLevel {
-        PRIMARY,
-        HIGH_SCHOOL,
-        ASSOCIATE,
-        BACHELOR,
-        MASTER,
-        PHD
-    }
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "job_seeker_skill",
+            joinColumns = @JoinColumn(name = "job_seeker_id"),
+            inverseJoinColumns = @JoinColumn(name = "skill_id")
+    )
+    private List<Skill> skills;
 }

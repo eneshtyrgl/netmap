@@ -35,10 +35,4 @@ public class JobApplication {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private ApplicationStatus status = ApplicationStatus.PENDING;
-
-    public enum ApplicationStatus {
-        PENDING,
-        ACCEPTED,
-        REJECTED
-    }
 }
