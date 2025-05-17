@@ -1,4 +1,4 @@
-package com.netmap.netmapservice.model.user;
+package com.netmap.netmapservice.model;
 
 import jakarta.persistence.*;
 import lombok.*;
