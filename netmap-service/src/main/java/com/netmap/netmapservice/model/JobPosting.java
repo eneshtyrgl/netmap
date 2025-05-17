@@ -1,7 +1,5 @@
-package com.netmap.netmapservice.model.job;
+package com.netmap.netmapservice.model;
 
-import com.netmap.netmapservice.model.user.Employer;
-import com.netmap.netmapservice.model.skill.Skill;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.JdbcTypeCode;
