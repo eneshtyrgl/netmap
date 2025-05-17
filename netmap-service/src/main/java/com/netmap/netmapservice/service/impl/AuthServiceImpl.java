@@ -5,6 +5,7 @@ import com.netmap.netmapservice.domain.request.RegisterRequest;
 import com.netmap.netmapservice.domain.response.AuthResponse;
 import com.netmap.netmapservice.model.AppUser;
 import com.netmap.netmapservice.repository.AppUserRepository;
+import com.netmap.netmapservice.security.JwtUtil;
 import com.netmap.netmapservice.service.AuthService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,15 @@ public class AuthServiceImpl implements AuthService {
 
     private final AppUserRepository appUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     @Autowired
     public AuthServiceImpl(AppUserRepository appUserRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           JwtUtil jwtUtil) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -38,9 +42,7 @@ public class AuthServiceImpl implements AuthService {
         newUser.setRole(AppUser.Role.valueOf(request.getRole()));
 
         appUserRepository.save(newUser);
-
-        // Temporary token since JWT is not yet implemented
-        String token = "mock-token";
+        String token = jwtUtil.generateToken(newUser.getId(), newUser.getRole().name());
         return new AuthResponse(token, newUser.getRole(), newUser.getFirstName(), newUser.getLastName());
     }
 
@@ -56,9 +58,7 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new RuntimeException("Invalid password");
         }
-
-        // Temporary token since JWT is not yet implemented
-        String token = "mock-token";
+        String token = jwtUtil.generateToken(user.getId(), user.getRole().name());
         return new AuthResponse(token, user.getRole(), user.getFirstName(), user.getLastName());
     }
 }
