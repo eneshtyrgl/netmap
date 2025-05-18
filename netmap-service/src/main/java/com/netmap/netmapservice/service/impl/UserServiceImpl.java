@@ -3,6 +3,7 @@ package com.netmap.netmapservice.service.impl;
 import com.netmap.netmapservice.domain.request.UpdateProfileRequest;
 import com.netmap.netmapservice.domain.response.ProfileResponse;
 import com.netmap.netmapservice.model.AppUser;
+import com.netmap.netmapservice.model.EducationLevel;
 import com.netmap.netmapservice.model.JobSeeker;
 import com.netmap.netmapservice.model.Skill;
 import com.netmap.netmapservice.repository.AppUserRepository;
@@ -75,12 +76,23 @@ public class UserServiceImpl implements UserService {
 
         appUserRepository.save(user);
 
-        if (user.getRole().name().equals("JOB_SEEKER") && request.getSkills() != null) {
+        if (user.getRole().name().equals("JOB_SEEKER")) {
             JobSeeker jobSeeker = jobSeekerRepository.findByAppUserId(userId)
                     .orElseThrow(() -> new RuntimeException("Job seeker not found"));
 
-            List<Skill> skills = skillRepository.findByNameIn(request.getSkills());
-            jobSeeker.setSkills(skills);
+            if (request.getExperienceYears() != null) {
+                jobSeeker.setExperienceYears(request.getExperienceYears());
+            }
+
+            if (request.getEducationLevel() != null) {
+                jobSeeker.setEducationLevel(EducationLevel.valueOf(request.getEducationLevel()));
+            }
+
+            if (request.getSkills() != null) {
+                List<Skill> skills = skillRepository.findByNameIn(request.getSkills());
+                jobSeeker.setSkills(skills);
+            }
+
             jobSeekerRepository.save(jobSeeker);
         }
     }

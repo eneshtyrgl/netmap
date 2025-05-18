@@ -9,6 +9,8 @@ import com.netmap.netmapservice.security.JwtUtil;
 import com.netmap.netmapservice.service.AuthService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,9 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthServiceImpl(AppUserRepository appUserRepository,
-                           PasswordEncoder passwordEncoder,
-                           JwtUtil jwtUtil) {
+    public AuthServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
@@ -39,26 +39,25 @@ public class AuthServiceImpl implements AuthService {
         newUser.setLastName(request.getLastName());
         newUser.setBirthDate(request.getBirthDate());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
-        newUser.setRole(AppUser.Role.valueOf(request.getRole()));
-
+        newUser.setRole(request.getRole());
         appUserRepository.save(newUser);
         String token = jwtUtil.generateToken(newUser.getId(), newUser.getRole().name());
-        return new AuthResponse(token, newUser.getRole(), newUser.getFirstName(), newUser.getLastName());
+        return new AuthResponse(token, newUser.getRole().name(), newUser.getFirstName(), newUser.getLastName());
     }
 
     @Override
     public AuthResponse login(LoginRequest request) {
         Optional<AppUser> userOpt = appUserRepository.findByUsername(request.getUsername());
         if (userOpt.isEmpty()) {
-            throw new RuntimeException("User not found");
+            throw new UsernameNotFoundException("User not found: " + request.getUsername());
         }
 
         AppUser user = userOpt.get();
 
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            throw new RuntimeException("Invalid password");
+            throw new BadCredentialsException("Invalid credentials");
         }
         String token = jwtUtil.generateToken(user.getId(), user.getRole().name());
-        return new AuthResponse(token, user.getRole(), user.getFirstName(), user.getLastName());
+        return new AuthResponse(token, user.getRole().name(), user.getFirstName(), user.getLastName());
     }
 }

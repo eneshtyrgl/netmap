@@ -57,4 +57,7 @@ public class JobPosting {
             inverseJoinColumns = @JoinColumn(name = "skill_id")
     )
     private List<Skill> skills;
+
+    @Column(name = "verified")
+    private Boolean verified = false;
 }

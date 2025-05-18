@@ -42,8 +42,8 @@ public class ApplicationServiceImpl implements ApplicationService {
     }
 
     @Override
-    public List<ApplicationResponse> getApplicationsByJobSeeker(UUID jobSeekerId) {
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jobSeekerId)
+    public List<ApplicationResponse> getApplicationsByJobSeeker(UUID appUserId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByAppUserId(appUserId)
                 .orElseThrow(() -> new RuntimeException("Job seeker not found"));
 
         return jobApplicationRepository.findByJobSeeker(jobSeeker).stream()

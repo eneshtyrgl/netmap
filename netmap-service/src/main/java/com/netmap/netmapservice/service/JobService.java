@@ -8,5 +8,8 @@ import java.util.UUID;
 
 public interface JobService {
     JobPostResponse createJob(UUID employerId, CreateJobRequest request);
-    List<JobPostResponse> listAllJobs();
+    List<JobPostResponse> getJobsForUser(UUID userId);
+
+    List<JobPostResponse> getUnverifiedJobs();
+    void verifyJobPosting(UUID jobId);
 }

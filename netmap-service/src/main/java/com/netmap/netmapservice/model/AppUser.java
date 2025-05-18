@@ -43,9 +43,4 @@ public class AppUser {
 
     @Column(name = "registration_date")
     private LocalDateTime registrationDate;
-
-    public enum Role {
-        JOB_SEEKER,
-        EMPLOYER
-    }
 }

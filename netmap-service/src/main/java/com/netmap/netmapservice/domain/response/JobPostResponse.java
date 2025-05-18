@@ -22,6 +22,7 @@ public class JobPostResponse {
     private BigDecimal longitude;
     private LocalDate postDate;
     private List<String> skills;
+    private Boolean verified;
 
     public JobPostResponse(JobPosting job) {
         this.id = job.getId();
@@ -36,5 +37,6 @@ public class JobPostResponse {
         this.skills = job.getSkills().stream()
                 .map(Skill::getName)
                 .collect(Collectors.toList());
+        this.verified = job.getVerified();
     }
 }

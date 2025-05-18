@@ -23,14 +23,13 @@ public class ApplicationController {
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/user/{id}")
-    public ResponseEntity<List<ApplicationResponse>> getUserApplications(@PathVariable UUID id) {
-        return ResponseEntity.ok(applicationService.getApplicationsByJobSeeker(id));
+    @GetMapping("/user/{appUserId}")
+    public ResponseEntity<List<ApplicationResponse>> getUserApplications(@PathVariable UUID appUserId) {
+        return ResponseEntity.ok(applicationService.getApplicationsByJobSeeker(appUserId));
     }
 
-    @GetMapping("/job/{id}")
-    public ResponseEntity<List<ApplicationResponse>> getApplicationsByJob(@PathVariable UUID id) {
-        return ResponseEntity.ok(applicationService.getApplicationsByJobPosting(id));
+    @GetMapping("/job/{jobPostingId}")
+    public ResponseEntity<List<ApplicationResponse>> getApplicationsByJob(@PathVariable UUID jobPostingId) {
+        return ResponseEntity.ok(applicationService.getApplicationsByJobPosting(jobPostingId));
     }
-
 }
