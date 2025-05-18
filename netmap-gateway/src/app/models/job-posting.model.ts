@@ -4,4 +4,5 @@ export interface JobPosting {
   company_name: string;
   latitude: number;
   longitude: number;
+  salary?: number;
 }

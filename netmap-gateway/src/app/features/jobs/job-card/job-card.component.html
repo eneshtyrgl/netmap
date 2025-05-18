@@ -1,0 +1,20 @@
+<p-card>
+  <ng-template pTemplate="header">
+    <h3>{{ job.title }}</h3>
+  </ng-template>
+
+  <div class="company">{{ job.company_name }}</div>
+  <div class="location">📍 Lat: {{ job.latitude }}, Lng: {{ job.longitude }}</div>
+  <div class="salary">💰 {{ job.salary | currency:'TRY':'symbol' }}</div>
+
+
+  <ng-template pTemplate="footer">
+    <button
+      class="p-button p-component"
+      type="button"
+    >
+      <span class="p-button-icon pi pi-map-marker"></span>
+      <span class="p-button-label">Haritada Göster</span>
+    </button>
+  </ng-template>
+</p-card>
