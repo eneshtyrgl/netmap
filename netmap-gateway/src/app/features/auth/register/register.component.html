@@ -1,0 +1,24 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <label>First Name</label>
+  <input formControlName="first_name" placeholder="First Name" />
+
+  <label>Last Name</label>
+  <input formControlName="last_name" placeholder="Last Name" />
+
+  <label>Username</label>
+  <input formControlName="username" placeholder="Username" />
+
+  <label>Password</label>
+  <input formControlName="password" type="password" placeholder="Password" />
+
+  <label>Role</label>
+  <select formControlName="role">
+    <option value="JOB_SEEKER">Job Seeker</option>
+    <option value="EMPLOYER">Employer</option>
+  </select>
+
+  <label>Birth Date</label>
+  <input formControlName="birth_date" type="date" />
+
+  <button type="submit">Register</button>
+</form>
