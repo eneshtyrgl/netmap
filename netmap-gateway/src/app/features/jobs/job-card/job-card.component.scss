@@ -1,0 +1,14 @@
+:host {
+  display: block;
+  margin-bottom: 1rem;
+
+  .company {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+  }
+
+  .location, .salary {
+    font-size: 0.9rem;
+    color: #555;
+  }
+}
