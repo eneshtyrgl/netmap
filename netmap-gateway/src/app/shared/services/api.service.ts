@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {JobPosting} from '../../models/job-posting.model';
 
 
 @Injectable({ providedIn: 'root' })
@@ -14,5 +16,9 @@ export class ApiService {
 
   get<T>(path: string) {
     return this.http.get<T>(`${this.BASE_URL}${path}`);
+  }
+
+  getAllJobs(): Observable<JobPosting[]> {
+    return this.http.get<JobPosting[]>(`${this.BASE_URL}/jobs`);
   }
 }

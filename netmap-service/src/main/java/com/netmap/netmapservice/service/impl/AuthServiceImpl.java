@@ -3,8 +3,10 @@ package com.netmap.netmapservice.service.impl;
 import com.netmap.netmapservice.domain.request.LoginRequest;
 import com.netmap.netmapservice.domain.request.RegisterRequest;
 import com.netmap.netmapservice.domain.response.AuthResponse;
-import com.netmap.netmapservice.model.AppUser;
+import com.netmap.netmapservice.model.*;
 import com.netmap.netmapservice.repository.AppUserRepository;
+import com.netmap.netmapservice.repository.EmployerRepository;
+import com.netmap.netmapservice.repository.JobSeekerRepository;
 import com.netmap.netmapservice.security.JwtUtil;
 import com.netmap.netmapservice.service.AuthService;
 import jakarta.transaction.Transactional;
@@ -14,18 +16,27 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
     private final AppUserRepository appUserRepository;
+    private final EmployerRepository employerRepository;
+    private final JobSeekerRepository jobSeekerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
     @Autowired
-    public AuthServiceImpl(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AuthServiceImpl(AppUserRepository appUserRepository,
+                           EmployerRepository employerRepository,
+                           JobSeekerRepository jobSeekerRepository,
+                           PasswordEncoder passwordEncoder,
+                           JwtUtil jwtUtil) {
         this.appUserRepository = appUserRepository;
+        this.employerRepository = employerRepository;
+        this.jobSeekerRepository = jobSeekerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
@@ -38,11 +49,30 @@ public class AuthServiceImpl implements AuthService {
         newUser.setFirstName(request.getFirstName());
         newUser.setLastName(request.getLastName());
         newUser.setBirthDate(request.getBirthDate());
+        newUser.setRegistrationDate(LocalDateTime.now());
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRole(request.getRole());
-        appUserRepository.save(newUser);
-        String token = jwtUtil.generateToken(newUser.getId(), newUser.getRole().name());
-        return new AuthResponse(token, newUser.getRole().name(), newUser.getFirstName(), newUser.getLastName());
+
+        AppUser savedUser = appUserRepository.save(newUser);
+
+        switch (request.getRole()) {
+            case EMPLOYER -> {
+                Employer employer = Employer.builder()
+                        .appUser(savedUser)
+                        .company(null)
+                        .build();
+                employerRepository.save(employer);
+            }
+            case JOB_SEEKER -> {
+                JobSeeker jobSeeker = JobSeeker.builder()
+                        .appUser(savedUser)
+                        .build();
+                jobSeekerRepository.save(jobSeeker);
+            }
+        }
+
+        String token = jwtUtil.generateToken(savedUser.getId(), savedUser.getRole().name());
+        return new AuthResponse(token, savedUser.getRole().name(), savedUser.getFirstName(), savedUser.getLastName());
     }
 
     @Override
@@ -57,6 +87,7 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadCredentialsException("Invalid credentials");
         }
+
         String token = jwtUtil.generateToken(user.getId(), user.getRole().name());
         return new AuthResponse(token, user.getRole().name(), user.getFirstName(), user.getLastName());
     }

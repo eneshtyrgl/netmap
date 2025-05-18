@@ -23,6 +23,7 @@ public class JobPostResponse {
     private LocalDate postDate;
     private List<String> skills;
     private Boolean verified;
+    private String companyName;
 
     public JobPostResponse(JobPosting job) {
         this.id = job.getId();
@@ -38,5 +39,9 @@ public class JobPostResponse {
                 .map(Skill::getName)
                 .collect(Collectors.toList());
         this.verified = job.getVerified();
+        this.companyName = job.getEmployer().getCompany() != null
+                ? job.getEmployer().getCompany().getName()
+                : "Unknown Company";
+
     }
 }
