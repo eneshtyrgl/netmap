@@ -1,14 +1,101 @@
 :host {
   display: block;
-  margin-bottom: 1rem;
+  height: 100%;
 
-  .company {
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-  }
+  ::ng-deep .job-card {
+    all: unset;
+    display: block;
+    border: 1.5px solid #c7dbf7;
+    border-radius: 16px;
+    background-color: #ffffff;
+    padding: 1.5rem;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+    transition: all 0.25s ease;
 
-  .location, .salary {
-    font-size: 0.9rem;
-    color: #555;
+    &:hover {
+      border-color: #6ca5e8;
+      box-shadow: 0 6px 20px rgba(108, 165, 232, 0.2);
+      transform: translateY(-4px);
+    }
+
+    .p-card-body,
+    .p-card-content,
+    .p-card-footer,
+    .p-card-header {
+      all: unset;
+    }
+
+    .card-header {
+      display: block;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 0.5rem;
+      margin-bottom: 1rem;
+
+      h3 {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 600;
+        line-height: 1.4;
+      }
+
+      .salary {
+        float: right;
+        margin-left: 0.75rem;
+        font-weight: bold;
+        color: #4d8ee4;
+        font-size: 1.05rem;
+        white-space: nowrap;
+      }
+    }
+
+    .company {
+      font-weight: 600;
+      font-size: 1rem;
+      color: #495057;
+      margin-bottom: 0.4rem;
+    }
+
+    .description {
+      color: #6c757d;
+      margin-bottom: 1rem;
+    }
+
+    .details {
+      font-size: 0.9rem;
+      color: #495057;
+      margin-bottom: 1rem;
+
+      div {
+        display: flex;
+        align-items: center;
+        margin-bottom: 0.3rem;
+
+        i {
+          color: #adb5bd;
+          margin-right: 0.5rem;
+        }
+      }
+    }
+
+    .skills {
+      margin-bottom: 1rem;
+
+      strong {
+        display: block;
+        margin-bottom: 0.25rem;
+      }
+
+      p-chip {
+        margin: 0.2rem 0.3rem 0.2rem 0;
+      }
+    }
+
+    .actions {
+      margin-top: auto;
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+    }
   }
 }

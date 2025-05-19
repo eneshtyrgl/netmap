@@ -1,0 +1,92 @@
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 260px;
+  padding: 1.5rem;
+  background-color: #eaf4fc;
+  border-right: 1px solid #ccc;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: #1a202c;
+  }
+
+  .form-section {
+    margin-bottom: 1.5rem;
+
+    .section-label {
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      display: block;
+      color: #333;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.5rem;
+
+      label {
+        margin-left: 0.5rem;
+        font-size: 0.95rem;
+        color: #444;
+      }
+    }
+  }
+
+  ::ng-deep .p-multiselect {
+    width: 100%;
+    font-size: 0.95rem;
+    background-color: transparent;
+    border: none;
+    box-shadow: none;
+    padding: 0;
+    position: relative;
+  }
+
+  ::ng-deep .p-multiselect-label-container,
+  ::ng-deep .p-multiselect-trigger,
+  ::ng-deep .p-multiselect-label {
+    display: none !important;
+  }
+
+
+  ::ng-deep .p-multiselect-panel {
+    position: static !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    transform: none !important;
+    box-shadow: none;
+    background-color: transparent;
+    border: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  ::ng-deep .p-multiselect-items-wrapper {
+    max-height: 180px;
+    overflow-y: auto;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    padding: 0.5rem;
+  }
+
+  ::ng-deep .p-multiselect-item {
+    padding: 0.5rem 0.75rem;
+    border-radius: 4px;
+    transition: background-color 0.2s ease;
+
+    &.p-highlight {
+      background-color: #cce4f7;
+      color: #000;
+    }
+
+    &:hover {
+      background-color: #eaf4fc;
+    }
+  }
+}

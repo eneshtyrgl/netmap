@@ -2,6 +2,7 @@ package com.netmap.netmapservice.mapper;
 
 import com.netmap.netmapservice.domain.response.JobSummaryResponse;
 import com.netmap.netmapservice.model.JobPosting;
+import com.netmap.netmapservice.model.Skill;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,7 +19,10 @@ public class JobMapper {
                 job.getIsRemote(),
                 job.getIsFreelance(),
                 job.getLatitude().doubleValue(),
-                job.getLongitude().doubleValue()
+                job.getLongitude().doubleValue(),
+                job.getSkills().stream().map(Skill::getName).toList(),
+                job.getDescription(),
+                job.getPostDate()
         );
     }
 }

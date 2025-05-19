@@ -1,0 +1,49 @@
+<form [formGroup]="form" class="sidebar">
+  <h3>Filter Jobs</h3>
+
+  <div class="form-section">
+    <label class="section-label">Job Type</label>
+
+    <div class="checkbox-group">
+      <p-checkbox
+        formControlName="is_remote"
+        binary="true"
+        inputId="remote"
+      ></p-checkbox>
+      <label for="remote">Remote</label>
+    </div>
+
+    <div class="checkbox-group">
+      <p-checkbox
+        formControlName="is_freelance"
+        binary="true"
+        inputId="freelance"
+      ></p-checkbox>
+      <label for="freelance">Freelance</label>
+    </div>
+  </div>
+
+  <div class="form-section">
+    <label for="radius" class="section-label">Distance</label>
+    <p-inputNumber
+      id="radius"
+      formControlName="radius_km"
+      [min]="1"
+      [max]="5000"
+      [showButtons]="true"
+      [step]="10"
+    />
+  </div>
+
+  <div class="form-section">
+    <label class="section-label">Skill</label>
+    <p-multiSelect
+      [options]="skillsOptions"
+      formControlName="skills"
+      display="comma"
+      appendTo="self"
+      placeholder="Select skills"
+    >
+    </p-multiSelect>
+  </div>
+</form>
