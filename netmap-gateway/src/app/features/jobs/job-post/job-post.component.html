@@ -1,0 +1,71 @@
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="job-post-form">
+  <h2 class="form-title">Create Job Posting</h2>
+
+  <div class="form-row">
+    <div class="form-col">
+      <label for="title">Job Title</label>
+      <input id="title" type="text" formControlName="title" placeholder="Enter job title" />
+      <small *ngIf="form.get('title')?.invalid && form.get('title')?.touched" class="error">Job title is required.</small>
+    </div>
+
+    <div class="form-col">
+      <label for="salary">Salary (TRY)</label>
+      <input id="salary" type="number" formControlName="salary" placeholder="e.g. 5000" min="0" />
+      <small *ngIf="form.get('salary')?.invalid && form.get('salary')?.touched" class="error">Salary must be positive.</small>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-col full-width">
+      <label for="description">Job Description</label>
+      <textarea id="description" formControlName="description" rows="5" placeholder="Write job description..."></textarea>
+      <small *ngIf="form.get('description')?.invalid && form.get('description')?.touched" class="error">Description is required.</small>
+    </div>
+  </div>
+
+  <div class="form-col">
+    <label for="title">Required Skills</label>
+  </div>
+  <div class="skills-checkbox-group">
+    <div *ngFor="let skill of skillsOptions">
+      <input
+        type="checkbox"
+        [id]="skill"
+        (change)="onSkillChange(skill, $event)"
+        [checked]="selectedSkills.includes(skill)"
+      />
+      <label [for]="skill">{{ skill }}</label>
+    </div>
+    <small *ngIf="selectedSkills.length === 0" class="error">Select at least one skill.</small>
+  </div>
+
+  <br>
+
+  <div class="form-row coords-row">
+    <div class="form-col">
+      <label for="latitude">Latitude</label>
+      <input id="latitude" type="number" formControlName="latitude" placeholder="e.g. 41.0082" min="-90" max="90" step="any" />
+    </div>
+
+    <div class="form-col">
+      <label for="longitude">Longitude</label>
+      <input id="longitude" type="number" formControlName="longitude" placeholder="e.g. 28.9784" min="-180" max="180" step="any" />
+    </div>
+  </div>
+
+
+  <div class="form-row checkbox-row">
+    <div>
+      <input type="checkbox" id="isRemote" formControlName="is_remote" />
+      <label for="isRemote">Remote</label>
+    </div>
+    <div>
+      <input type="checkbox" id="isFreelance" formControlName="is_freelance" />
+      <label for="isFreelance">Freelance</label>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <button type="submit" [disabled]="form.invalid">Post Job</button>
+  </div>
+</form>

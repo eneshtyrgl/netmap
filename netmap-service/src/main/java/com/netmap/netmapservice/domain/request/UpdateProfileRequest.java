@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.Data;
 
 import java.util.List;
+import java.util.UUID;
 
 @Data
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -14,4 +15,5 @@ public class UpdateProfileRequest {
     private List<String> skills;
     private Integer experienceYears;
     private String educationLevel;
+    private UUID companyId;
 }

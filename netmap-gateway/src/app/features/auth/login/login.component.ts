@@ -33,7 +33,9 @@ export class LoginComponent {
   onSubmit() {
     this.api.post('/auth/login', this.form.value).subscribe((res: any) => {
       localStorage.setItem('token', res.token);
+      localStorage.setItem('user_id', res.user_id);
       localStorage.setItem('username', res.username);
+      localStorage.setItem('role', res.role);
       this.router.navigate(['/map']).then();
     });
   }

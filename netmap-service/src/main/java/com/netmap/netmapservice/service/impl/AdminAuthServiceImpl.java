@@ -36,6 +36,7 @@ public class AdminAuthServiceImpl implements AdminAuthService {
 
         return new AuthResponse(
                 token,
+                admin.getId(),
                 "ADMIN",
                 "Admin",
                 "User",

@@ -1,0 +1,87 @@
+.job-approvals-container {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+
+h2 {
+  color: #2c7be5;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  user-select: none;
+}
+
+.error {
+  color: #dc3545;
+  font-weight: 600;
+  margin: 1rem 0;
+  font-size: 1.1rem;
+}
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.job-item {
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 3px 10px rgba(44, 123, 229, 0.15);
+  padding: 1.5rem 2rem;
+  margin-bottom: 1.5rem;
+  transition: box-shadow 0.3s ease;
+  user-select: none;
+
+  &:hover {
+    box-shadow: 0 7px 22px rgba(44, 123, 229, 0.3);
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #1f2d4a;
+  }
+
+  p {
+    margin: 0.3rem 0;
+    color: #475569;
+    font-size: 1rem;
+
+    strong {
+      color: #33475b;
+    }
+  }
+
+  button {
+    margin-top: 1rem;
+    padding: 0.5rem 1.3rem;
+    background-color: #2c7be5;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(44, 123, 229, 0.4);
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+
+    &:hover {
+      background-color: #1a5fc1;
+      box-shadow: 0 6px 18px rgba(26, 95, 193, 0.6);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(44, 123, 229, 0.7);
+    }
+  }
+}
+
+/* Loading text styling */
+div[ng-reflect-ng-if="true"] {
+  font-weight: 600;
+  color: #2c7be5;
+  margin-bottom: 1rem;
+  font-size: 1.1rem;
+}

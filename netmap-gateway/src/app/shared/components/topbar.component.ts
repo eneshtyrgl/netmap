@@ -18,14 +18,25 @@ export class TopbarComponent {
     return localStorage.getItem('username') || 'User';
   }
 
+  get role(): string | null {
+    return localStorage.getItem('role');
+  }
+
+
   isLoggedIn(): boolean {
     return !!localStorage.getItem('token');
   }
 
   constructor(private router: Router) {}
 
+  goToProfile() {
+    this.router.navigate(['/profile/edit']);
+  }
+
   logout() {
     localStorage.clear();
     this.router.navigate(['/login']).then();
   }
+
+
 }

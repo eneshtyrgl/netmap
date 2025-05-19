@@ -27,7 +27,4 @@ public class Employer {
     @ManyToOne
     @JoinColumn(name = "company_id")
     private Company company;
-
-    @Column(name = "verified")
-    private Boolean verified = false;
 }

@@ -24,6 +24,6 @@ export class AppComponent {
 
   shouldShowTopbar(): boolean {
     const hiddenRoutes = ['/login', '/register', '/admin/login'];
-    return !hiddenRoutes.includes(this.currentUrl);
+    return !hiddenRoutes.some(route => this.currentUrl.startsWith(route));
   }
 }

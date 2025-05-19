@@ -1,5 +1,6 @@
 package com.netmap.netmapservice.controller;
 
+import com.netmap.netmapservice.model.Skill;
 import com.netmap.netmapservice.repository.SkillRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -18,4 +19,9 @@ public class SkillController {
     public ResponseEntity<List<String>> getAllSkillNames() {
         return ResponseEntity.ok(skillRepository.findAllSkillNames());
     }
+    @GetMapping("/all")
+    public ResponseEntity<List<Skill>> getAllSkills() {
+        return ResponseEntity.ok(skillRepository.findAll());
+    }
+
 }

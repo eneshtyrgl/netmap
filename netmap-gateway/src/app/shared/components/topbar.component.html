@@ -17,6 +17,9 @@
   <div class="center">
     <a routerLink="/map">Map</a>
     <a routerLink="/jobs">Jobs</a>
+
+    <a *ngIf="role === 'EMPLOYER'" routerLink="/job-post">Post a Job</a>
+    <a *ngIf="role === 'ADMIN'" routerLink="/admin/job-approvals">Job Approvals</a>
   </div>
 
   <div class="right" *ngIf="!isLoggedIn(); else userMenu">
@@ -26,7 +29,7 @@
 
   <ng-template #userMenu>
     <div class="user-menu">
-      <span>{{ username }}</span>
+      <span class="username-link" (click)="goToProfile()">{{ username }}</span>
       <button (click)="logout()">Logout</button>
     </div>
   </ng-template>

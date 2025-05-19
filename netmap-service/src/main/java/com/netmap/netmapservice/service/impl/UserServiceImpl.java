@@ -2,13 +2,8 @@ package com.netmap.netmapservice.service.impl;
 
 import com.netmap.netmapservice.domain.request.UpdateProfileRequest;
 import com.netmap.netmapservice.domain.response.ProfileResponse;
-import com.netmap.netmapservice.model.AppUser;
-import com.netmap.netmapservice.model.EducationLevel;
-import com.netmap.netmapservice.model.JobSeeker;
-import com.netmap.netmapservice.model.Skill;
-import com.netmap.netmapservice.repository.AppUserRepository;
-import com.netmap.netmapservice.repository.JobSeekerRepository;
-import com.netmap.netmapservice.repository.SkillRepository;
+import com.netmap.netmapservice.model.*;
+import com.netmap.netmapservice.repository.*;
 import com.netmap.netmapservice.service.UserService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,14 +19,20 @@ public class UserServiceImpl implements UserService {
     private final AppUserRepository appUserRepository;
     private final JobSeekerRepository jobSeekerRepository;
     private final SkillRepository skillRepository;
+    private final EmployerRepository employerRepository;
+    private final CompanyRepository companyRepository;
 
     @Autowired
     public UserServiceImpl(AppUserRepository appUserRepository,
                            JobSeekerRepository jobSeekerRepository,
-                           SkillRepository skillRepository) {
+                           SkillRepository skillRepository,
+                           EmployerRepository employerRepository,
+                           CompanyRepository companyRepository) {
         this.appUserRepository = appUserRepository;
         this.jobSeekerRepository = jobSeekerRepository;
         this.skillRepository = skillRepository;
+        this.employerRepository = employerRepository;
+        this.companyRepository = companyRepository;
     }
 
     @Override
@@ -89,11 +90,26 @@ public class UserServiceImpl implements UserService {
             }
 
             if (request.getSkills() != null) {
-                List<Skill> skills = skillRepository.findByNameIn(request.getSkills());
+                List<UUID> skillIds = request.getSkills().stream()
+                        .map(UUID::fromString)
+                        .toList();
+
+                List<Skill> skills = skillRepository.findAllById(skillIds);
                 jobSeeker.setSkills(skills);
             }
 
             jobSeekerRepository.save(jobSeeker);
+        } else if (user.getRole().name().equals("EMPLOYER")) {
+            Employer employer = employerRepository.findByAppUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("Employer not found"));
+
+            if (request.getCompanyId() != null) {
+                Company company = companyRepository.findById(request.getCompanyId())
+                        .orElseThrow(() -> new RuntimeException("Company not found"));
+                employer.setCompany(company);
+            }
+
+            employerRepository.save(employer);
         }
     }
 }

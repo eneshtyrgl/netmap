@@ -1,4 +1,5 @@
 .topbar {
+  position: relative;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -6,21 +7,35 @@
   background-color: #f8f9fa;
   border-bottom: 1px solid #dee2e6;
 
+  .left,
+  .right {
+    flex: 0 0 auto;
+  }
+
+  .center {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 1.5rem;
+
+    a {
+      text-decoration: none;
+      color: #333;
+
+      &:hover {
+        color: #2c7be5;
+      }
+    }
+  }
+
   .logo {
     font-size: 1.5rem;
     font-weight: bold;
     color: #2c7be5;
     text-decoration: none;
-  }
-
-  a {
-    margin: 0 0.75rem;
-    text-decoration: none;
-    color: #333;
-
-    &:hover {
-      color: #2c7be5;
-    }
+    display: flex;
+    align-items: center;
   }
 
   .user-menu {
@@ -32,7 +47,20 @@
   button {
     background: none;
     border: none;
-    color: #e63946;
+    color: black;
     cursor: pointer;
+
+    &:hover {
+      color: #ff0707;
+    }
+  }
+}
+
+.username-link {
+  cursor: pointer;
+  color: black;
+
+  &:hover {
+    color: #2c7be5;
   }
 }

@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {JobPosting} from '../../models/job-posting.model';
-
+import { Observable } from 'rxjs';
+import { JobPosting } from '../../models/job-posting.model';
 
 @Injectable({ providedIn: 'root' })
 export class ApiService {
@@ -18,15 +17,31 @@ export class ApiService {
     return this.http.get<T>(`${this.BASE_URL}${path}`);
   }
 
+  put<T>(path: string, data: any): Observable<T> {
+    return this.http.put<T>(`${this.BASE_URL}${path}`, data);
+  }
+
   getAllJobs(): Observable<JobPosting[]> {
     return this.http.get<JobPosting[]>(`${this.BASE_URL}/jobs`);
   }
 
-  getFilteredJobs(filter: any) {
+  getFilteredJobs(filter: any): Observable<JobPosting[]> {
     return this.http.post<JobPosting[]>(`${this.BASE_URL}/jobs/filter`, filter);
   }
 
-  getAllSkills(): Observable<string[]> {
-    return this.http.get<string[]>(`${this.BASE_URL}/skills`);
+  getAllSkills(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.BASE_URL}/skills/all`);
+  }
+
+  getAllCompanies(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.BASE_URL}/companies`);
+  }
+
+  getProfile(userId: string): Observable<any> {
+    return this.http.get<any>(`${this.BASE_URL}/users/${userId}`);
+  }
+
+  updateProfile(userId: string, data: any): Observable<any> {
+    return this.http.put<any>(`${this.BASE_URL}/users/${userId}`, data);
   }
 }

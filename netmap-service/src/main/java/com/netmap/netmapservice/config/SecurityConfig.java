@@ -31,9 +31,12 @@ public class SecurityConfig {
                                 "/auth/register",
                                 "/auth/login",
                                 "/admin/login",
-                                "/skills" // ← Skills endpointi artık public
+                                "/skills"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/jobs/**").hasAnyRole("ADMIN", "EMPLOYER", "JOB_SEEKER")
+                        .requestMatchers("/companies").hasAnyRole("EMPLOYER", "ADMIN")
+                        .requestMatchers("/users/**").hasAnyRole("JOB_SEEKER", "EMPLOYER", "ADMIN")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

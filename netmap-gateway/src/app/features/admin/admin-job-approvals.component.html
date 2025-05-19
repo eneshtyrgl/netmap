@@ -1,0 +1,20 @@
+<div class="job-approvals-container">
+  <h2>Job Approvals</h2>
+
+  <div *ngIf="loading">Loading...</div>
+  <div *ngIf="error" class="error">{{ error }}</div>
+
+  <ul *ngIf="(jobs ?? []).length > 0; else noJobs">
+    <li *ngFor="let job of jobs" class="job-item">
+      <h3>{{ job.title }}</h3>
+      <p>{{ job.description }}</p>
+      <p><strong>Company:</strong> {{ job.company_name }}</p>
+      <p><strong>Salary:</strong> {{ job.salary | currency:'TRY' }}</p>
+      <button (click)="verifyJob(job.id)">Approve</button>
+    </li>
+  </ul>
+
+  <ng-template #noJobs>
+    <p>No jobs awaiting approval.</p>
+  </ng-template>
+</div>

@@ -31,13 +31,14 @@ export class JobsSidebarComponent implements OnInit {
     this.form = this.fb.group({
       is_remote: [null],
       is_freelance: [null],
-      skills: [null],
+      skills: [[]],
       radius_km: [100]
     });
   }
 
   ngOnInit(): void {
-    this.api.getAllSkills().subscribe((skills) => {
+    this.api.getAllSkills().subscribe((skills: any[]) => {
+      // skills = [{ id, name }]
       this.skillsOptions = skills;
       this.emitFilter();
     });
@@ -46,6 +47,7 @@ export class JobsSidebarComponent implements OnInit {
       this.emitFilter();
     });
   }
+
 
 
   private emitFilter(): void {

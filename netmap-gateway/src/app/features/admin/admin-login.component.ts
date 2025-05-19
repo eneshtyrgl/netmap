@@ -36,7 +36,9 @@ export class AdminLoginComponent {
     this.api.post('/admin/login', this.form.value).subscribe({
       next: (res: any) => {
         localStorage.setItem('token', res.token);
+        localStorage.setItem('user_id', res.user_id);
         localStorage.setItem('username', res.username);
+        localStorage.setItem('role', res.role);
         this.router.navigate(['/map']).then();
       },
       error: (err) => {

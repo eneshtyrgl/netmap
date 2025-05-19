@@ -1,7 +1,6 @@
 import { Component, AfterViewInit } from '@angular/core';
 import * as L from 'leaflet';
 import {ApiService} from '../../shared/services/api.service';
-import {JobPosting} from '../../models/job-posting.model';
 
 @Component({
   selector: 'app-map',
@@ -32,16 +31,13 @@ export class MapComponent implements AfterViewInit {
   }
 
   private initMap(): void {
-    this.map = L.map('map').setView([39.9208, 32.8541], 6); // Ankara merkezli
+    this.map = L.map('map').setView([39.9208, 32.8541], 12);
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors',
     }).addTo(this.map);
 
-    L.marker([39.9208, 32.8541])
-      .addTo(this.map)
-      .bindPopup('Ankara');
-  }
+    L.marker([39.9208, 32.8541]);}
 
   private setCustomMarkerIcons(): void {
     const iconRetinaUrl = 'assets/leaflet/marker-icon-2x.png';

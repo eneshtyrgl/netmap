@@ -1,0 +1,75 @@
+<div class="profile-edit-container" *ngIf="form && form.controls">
+  <h2 class="title">Edit Your Profile</h2>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
+    <div class="form-card">
+      <h3 class="section-title">General Info</h3>
+      <div class="form-group">
+        <label for="first_name">First Name</label>
+        <input pInputText formControlName="first_name" id="first_name" />
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name</label>
+        <input pInputText formControlName="last_name" id="last_name" />
+      </div>
+    </div>
+
+    <div class="form-card">
+      <ng-container *ngIf="role === 'JOB_SEEKER'">
+        <h3 class="section-title">Job Seeker Details</h3>
+        <div class="form-group">
+          <label>Education Level</label>
+          <div class="education-level-buttons">
+            <button type="button" *ngFor="let level of educationLevels"
+                    [ngClass]="{ selected: form.get('education_level')?.value === level }"
+                    (click)="selectEducationLevel(level)">
+              {{ level.replace('_', ' ') }}
+            </button>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="experience_years">Experience Years</label>
+          <p-inputNumber formControlName="experience_years" inputId="experience_years"></p-inputNumber>
+        </div>
+        <div class="form-group">
+          <label>Skills</label>
+          <div class="skills-checkbox-scroll">
+            <div class="skills-checkbox-grid">
+              <div *ngFor="let skill of skills" class="skill-checkbox-item">
+                <input type="checkbox"
+                       [id]="skill.id"
+                       [value]="skill.id"
+                       (change)="onSkillToggle(skill.id, $event)"
+                       [checked]="form.get('skills')?.value.includes(skill.id)" />
+                <label [for]="skill.id">{{ skill.name }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+      <ng-container *ngIf="role === 'EMPLOYER'">
+        <h3 class="section-title">Employer Details</h3>
+        <div class="form-group">
+          <label>Company</label>
+          <div class="company-checkbox-scroll">
+            <div class="company-checkbox-grid">
+              <div *ngFor="let company of companies" class="company-checkbox-item">
+                <input type="radio"
+                       [id]="company.id"
+                       [value]="company.id"
+                       formControlName="company_id"
+                       name="company_id" />
+                <label [for]="company.id">{{ company.name }}</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+    </div>
+
+    <div class="form-footer">
+      <button type="submit" pButton label="Save" class="save-btn"></button>
+    </div>
+  </form>
+</div>

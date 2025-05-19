@@ -28,22 +28,25 @@
     <p-inputNumber
       id="radius"
       formControlName="radius_km"
-      [min]="1"
+      [min]="10"
       [max]="5000"
       [showButtons]="true"
       [step]="10"
     />
   </div>
-
+ 
   <div class="form-section">
     <label class="section-label">Skill</label>
     <p-multiSelect
       [options]="skillsOptions"
+      optionLabel="name"
+      optionValue="id"
       formControlName="skills"
       display="comma"
       appendTo="self"
       placeholder="Select skills"
     >
     </p-multiSelect>
+
   </div>
 </form>
