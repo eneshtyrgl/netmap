@@ -1,0 +1,28 @@
+.jobs-container {
+  display: flex;
+  min-height: 100vh;
+  background: #f1f3f5;
+}
+
+.job-cards {
+  flex: 1;
+  padding: 2rem 3rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(340px, 1fr));
+  gap: 2rem;
+  background: #f8f9fa;
+  align-items: stretch;
+}
+
+@media (max-width: 1200px) {
+  .job-cards {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .job-cards {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+}

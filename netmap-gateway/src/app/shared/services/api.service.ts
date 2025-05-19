@@ -21,4 +21,12 @@ export class ApiService {
   getAllJobs(): Observable<JobPosting[]> {
     return this.http.get<JobPosting[]>(`${this.BASE_URL}/jobs`);
   }
+
+  getFilteredJobs(filter: any) {
+    return this.http.post<JobPosting[]>(`${this.BASE_URL}/jobs/filter`, filter);
+  }
+
+  getAllSkills(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.BASE_URL}/skills`);
+  }
 }

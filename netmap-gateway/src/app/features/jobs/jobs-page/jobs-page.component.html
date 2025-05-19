@@ -1,3 +1,6 @@
-<div class="jobs-list">
-  <app-job-card *ngFor="let job of jobs" [job]="job" />
+<div class="jobs-container">
+  <app-jobs-sidebar (filterChange)="onFilterChange($event)" />
+  <div class="job-cards">
+    <app-job-card *ngFor="let job of jobs" [job]="job" />
+  </div>
 </div>

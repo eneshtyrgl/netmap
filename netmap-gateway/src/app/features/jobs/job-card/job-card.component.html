@@ -1,20 +1,43 @@
-<p-card>
+<p-card class="job-card">
   <ng-template pTemplate="header">
-    <h3>{{ job.title }}</h3>
+    <div class="card-header">
+      <h3>{{ job.title }}</h3>
+      <span class="salary">{{ '$' + job.salary }}</span>
+    </div>
   </ng-template>
 
   <div class="company">{{ job.company_name }}</div>
-  <div class="location">📍 Lat: {{ job.latitude }}, Lng: {{ job.longitude }}</div>
-  <div class="salary">💰 {{ job.salary | currency:'TRY':'symbol' }}</div>
+  <div class="description">{{ job.description }}</div>
 
+  <div class="details">
+    <div><i class="pi pi-calendar"></i> {{ job.post_date }}</div>
+    <div><i class="pi pi-globe"></i> {{ job.is_remote ? 'Remote' : 'On-site' }}</div>
+    <div><i class="pi pi-user"></i> {{ job.is_freelance ? 'Freelance' : 'Full-time' }}</div>
+    <div><i class="pi pi-map-marker"></i> {{ cityName }}</div>
+  </div>
+
+  <div *ngIf="job.skills?.length" class="skills">
+    <strong>Skills:</strong>
+    <p-chip *ngFor="let skill of job.skills" label="{{ skill }}"></p-chip>
+  </div>
 
   <ng-template pTemplate="footer">
-    <button
-      class="p-button p-component"
-      type="button"
-    >
-      <span class="p-button-icon pi pi-map-marker"></span>
-      <span class="p-button-label">Haritada Göster</span>
-    </button>
+    <div class="actions">
+      <button
+        pButton
+        type="button"
+        icon="pi pi-map-marker"
+        label="Show on Map"
+        class="p-button-sm p-button-text"
+      ></button>
+
+      <button
+        pButton
+        type="button"
+        icon="pi pi-send"
+        label="Apply"
+        class="p-button-sm p-button-primary"
+      ></button>
+    </div>
   </ng-template>
 </p-card>

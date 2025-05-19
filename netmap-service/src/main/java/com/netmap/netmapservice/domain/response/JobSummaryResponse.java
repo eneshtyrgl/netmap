@@ -3,10 +3,12 @@ package com.netmap.netmapservice.domain.response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.UUID;
+import java.util.List;
 
-@Data
 @AllArgsConstructor
+@Data
 public class JobSummaryResponse {
     private UUID id;
     private String title;
@@ -16,5 +18,7 @@ public class JobSummaryResponse {
     private Boolean isFreelance;
     private double latitude;
     private double longitude;
+    private List<String> skills;
+    private String description;
+    private LocalDate postDate;
 }
-
