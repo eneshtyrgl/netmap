@@ -34,6 +34,12 @@ public class AdminAuthServiceImpl implements AdminAuthService {
         String token = jwtUtil.generateToken(admin.getId(), "ADMIN");
 
 
-        return new AuthResponse(token, "ADMIN", "Admin", "User");
+        return new AuthResponse(
+                token,
+                "ADMIN",
+                "Admin",
+                "User",
+                admin.getUsername()
+        );
     }
 }

@@ -1,5 +1,5 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
-  <h2>Login to NetMap</h2>
+  <h2>Admin Login to NetMap</h2>
 
   <div class="form-group">
     <label for="username">Username</label>
@@ -28,12 +28,5 @@
     severity="primary"
     styleClass="submit-button"
     [disabled]="form.invalid"
-  />
-
-  <p class="form-footer">
-    Don’t have an account?
-    <a routerLink="/register">Register</a>
-  </p>
+  ></p-button>
 </form>
-
-

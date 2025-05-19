@@ -1,16 +1,24 @@
 import { Component } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import { Router } from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import { ApiService } from '../../../shared/services/api.service';
 import {CommonModule} from '@angular/common';
+import {Button} from 'primeng/button';
+import {PasswordDirective} from 'primeng/password';
+import {InputText} from 'primeng/inputtext';
 
 @Component({
   selector: 'app-login',
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    InputText,
+    PasswordDirective,
+    RouterLink,
+    Button
   ],
-  templateUrl: './login.component.html'
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.scss']
 })
 export class LoginComponent {
   form: FormGroup;
@@ -25,6 +33,7 @@ export class LoginComponent {
   onSubmit() {
     this.api.post('/auth/login', this.form.value).subscribe((res: any) => {
       localStorage.setItem('token', res.token);
+      localStorage.setItem('username', res.username);
       this.router.navigate(['/map']).then();
     });
   }

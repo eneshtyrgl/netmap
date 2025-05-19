@@ -1,0 +1,38 @@
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+
+  .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #2c7be5;
+    text-decoration: none;
+  }
+
+  a {
+    margin: 0 0.75rem;
+    text-decoration: none;
+    color: #333;
+
+    &:hover {
+      color: #2c7be5;
+    }
+  }
+
+  .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  button {
+    background: none;
+    border: none;
+    color: #e63946;
+    cursor: pointer;
+  }
+}

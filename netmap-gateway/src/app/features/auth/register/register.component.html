@@ -1,24 +1,65 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-  <label>First Name</label>
-  <input formControlName="first_name" placeholder="First Name" />
+<form [formGroup]="form" (ngSubmit)="onSubmit()" class="auth-form">
+  <h2>Create Your Account</h2>
 
-  <label>Last Name</label>
-  <input formControlName="last_name" placeholder="Last Name" />
+  <div class="form-group">
+    <label for="first_name">First Name</label>
+    <input id="first_name" type="text" pInputText formControlName="first_name" />
+  </div>
 
-  <label>Username</label>
-  <input formControlName="username" placeholder="Username" />
+  <div class="form-group">
+    <label for="last_name">Last Name</label>
+    <input id="last_name" type="text" pInputText formControlName="last_name" />
+  </div>
 
-  <label>Password</label>
-  <input formControlName="password" type="password" placeholder="Password" />
+  <div class="form-group">
+    <label for="username">Username</label>
+    <input id="username" type="text" pInputText formControlName="username" />
+  </div>
 
-  <label>Role</label>
-  <select formControlName="role">
-    <option value="JOB_SEEKER">Job Seeker</option>
-    <option value="EMPLOYER">Employer</option>
-  </select>
+  <div class="form-group">
+    <label for="password">Password</label>
+    <input id="password" type="password" pPassword formControlName="password" />
+  </div>
 
-  <label>Birth Date</label>
-  <input formControlName="birth_date" type="date" />
+  <div class="form-group">
+    <label>Role</label>
+    <div class="role-toggle">
+      <button
+        type="button"
+        class="role-button"
+        [class.active]="form.get('role')?.value === 'JOB_SEEKER'"
+        (click)="form.get('role')?.setValue('JOB_SEEKER')"
+      >
+        Job Seeker
+      </button>
+      <button
+        type="button"
+        class="role-button"
+        [class.active]="form.get('role')?.value === 'EMPLOYER'"
+        (click)="form.get('role')?.setValue('EMPLOYER')"
+      >
+        Employer
+      </button>
+    </div>
+  </div>
 
-  <button type="submit">Register</button>
+  <div class="form-group">
+    <input type="date" formControlName="birth_date" class="p-inputtext calendar-input" />
+  </div>
+
+  <p-button
+    type="submit"
+    label="Register"
+    severity="primary"
+    styleClass="submit-button"
+    [disabled]="form.invalid"
+  />
+
+
+
+  <p class="form-footer">
+    Already have an account?
+    <a routerLink="/login">Login</a>
+  </p>
+
 </form>

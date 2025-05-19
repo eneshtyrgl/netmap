@@ -1,0 +1,33 @@
+<nav class="topbar">
+  <div class="left">
+    <a routerLink="/" class="logo">
+      <img
+        ngSrc="assets/icon.png"
+        width="50"
+        height="50"
+        alt="NetMap Logo"
+        style="vertical-align: middle; margin-right: 8px;"
+        priority
+      />
+      NetMap
+    </a>
+  </div>
+
+
+  <div class="center">
+    <a routerLink="/map">Map</a>
+    <a routerLink="/jobs">Jobs</a>
+  </div>
+
+  <div class="right" *ngIf="!isLoggedIn(); else userMenu">
+    <a routerLink="/login">Login</a>
+    <a routerLink="/register">Register</a>
+  </div>
+
+  <ng-template #userMenu>
+    <div class="user-menu">
+      <span>{{ username }}</span>
+      <button (click)="logout()">Logout</button>
+    </div>
+  </ng-template>
+</nav>
