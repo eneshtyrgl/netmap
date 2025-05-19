@@ -1,6 +1,7 @@
 package com.netmap.netmapservice.controller;
 
 import com.netmap.netmapservice.domain.response.ApplicationResponse;
+import com.netmap.netmapservice.domain.response.ApplicationSummaryResponse;
 import com.netmap.netmapservice.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
+
 
 @RestController
 @RequestMapping("/applications")
@@ -24,8 +26,8 @@ public class ApplicationController {
     }
 
     @GetMapping("/user/{appUserId}")
-    public ResponseEntity<List<ApplicationResponse>> getUserApplications(@PathVariable UUID appUserId) {
-        return ResponseEntity.ok(applicationService.getApplicationsByJobSeeker(appUserId));
+    public ResponseEntity<List<ApplicationSummaryResponse>> getUserApplications(@PathVariable UUID appUserId) {
+        return ResponseEntity.ok(applicationService.getApplicationSummariesByUser(appUserId));
     }
 
     @GetMapping("/job/{jobPostingId}")

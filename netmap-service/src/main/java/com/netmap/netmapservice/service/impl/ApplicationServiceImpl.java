@@ -1,6 +1,8 @@
 package com.netmap.netmapservice.service.impl;
 
 import com.netmap.netmapservice.domain.response.ApplicationResponse;
+import com.netmap.netmapservice.domain.response.ApplicationSummaryResponse;
+import com.netmap.netmapservice.mapper.ApplicationMapper;
 import com.netmap.netmapservice.model.*;
 import com.netmap.netmapservice.repository.JobApplicationRepository;
 import com.netmap.netmapservice.repository.JobPostingRepository;
@@ -22,6 +24,7 @@ public class ApplicationServiceImpl implements ApplicationService {
     private final JobApplicationRepository jobApplicationRepository;
     private final JobPostingRepository jobPostingRepository;
     private final JobSeekerRepository jobSeekerRepository;
+    private final ApplicationMapper applicationMapper;
 
     @Override
     @Transactional
@@ -58,6 +61,15 @@ public class ApplicationServiceImpl implements ApplicationService {
 
         return jobApplicationRepository.findByJobPosting(jobPosting).stream()
                 .map(ApplicationResponse::new)
+                .collect(Collectors.toList());
+    }
+    @Override
+    public List<ApplicationSummaryResponse> getApplicationSummariesByUser(UUID appUserId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByAppUserId(appUserId)
+                .orElseThrow(() -> new RuntimeException("Job seeker not found"));
+
+        return jobApplicationRepository.findByJobSeeker(jobSeeker).stream()
+                .map(applicationMapper::toSummary)
                 .collect(Collectors.toList());
     }
 }
