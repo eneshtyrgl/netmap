@@ -1,7 +1,10 @@
 package com.netmap.netmapservice.service.impl;
 
 import com.netmap.netmapservice.domain.request.CreateJobRequest;
+import com.netmap.netmapservice.domain.request.FilterJobRequest;
 import com.netmap.netmapservice.domain.response.JobPostResponse;
+import com.netmap.netmapservice.domain.response.JobSummaryResponse;
+import com.netmap.netmapservice.mapper.JobMapper;
 import com.netmap.netmapservice.model.AppUser;
 import com.netmap.netmapservice.model.Employer;
 import com.netmap.netmapservice.model.JobPosting;
@@ -27,16 +30,31 @@ public class JobServiceImpl implements JobService {
     private final EmployerRepository employerRepository;
     private final JobPostingRepository jobPostingRepository;
     private final SkillRepository skillRepository;
+    private final JobMapper jobMapper;
+
+    private double haversine(double lat1, double lon1, double lat2, double lon2) {
+        final int R = 6371; // Earth radius in km
+        double dLat = Math.toRadians(lat2 - lat1);
+        double dLon = Math.toRadians(lon2 - lon1);
+        double a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
+                + Math.cos(Math.toRadians(lat1)) * Math.cos(Math.toRadians(lat2))
+                * Math.sin(dLon / 2) * Math.sin(dLon / 2);
+        double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+        return R * c;
+    }
+
 
     @Autowired
     public JobServiceImpl(AppUserRepository appUserRepository,
                           EmployerRepository employerRepository,
                           JobPostingRepository jobPostingRepository,
-                          SkillRepository skillRepository) {
+                          SkillRepository skillRepository,
+                          JobMapper jobMapper) {
         this.appUserRepository = appUserRepository;
         this.employerRepository = employerRepository;
         this.jobPostingRepository = jobPostingRepository;
         this.skillRepository = skillRepository;
+        this.jobMapper = jobMapper;
     }
 
     @Override
@@ -99,4 +117,29 @@ public class JobServiceImpl implements JobService {
         jobPostingRepository.save(job);
     }
 
+    @Override
+    public List<JobSummaryResponse> filterJobs(FilterJobRequest request) {
+        List<JobPosting> jobs = jobPostingRepository.findByVerifiedTrue();
+
+        return jobs.stream()
+                .filter(job -> request.getIsRemote() == null || job.getIsRemote().equals(request.getIsRemote()))
+                .filter(job -> request.getIsFreelance() == null || job.getIsFreelance().equals(request.getIsFreelance()))
+                .filter(job -> request.getSkills() == null || request.getSkills().isEmpty() ||
+                        job.getSkills().stream().anyMatch(skill -> request.getSkills().contains(skill.getName())))
+                .map(jobMapper::toSummary)
+                .filter(summary -> {
+                    if (request.getRadiusKm() == null ||
+                            request.getUserLatitude() == null ||
+                            request.getUserLongitude() == null) {
+                        return true;
+                    }
+                    return haversine(
+                            request.getUserLatitude().doubleValue(),
+                            request.getUserLongitude().doubleValue(),
+                            summary.getLatitude(),
+                            summary.getLongitude()
+                    ) <= request.getRadiusKm();
+                })
+                .collect(Collectors.toList());
+    }
 }
