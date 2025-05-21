@@ -1,4 +1,4 @@
-<div class="profile-edit-container" *ngIf="form && form.controls">
+<div class="profile-edit-container" *ngIf="form && isPatched">
   <h2 class="title">Edit Your Profile</h2>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="form-grid">
@@ -17,6 +17,7 @@
     <div class="form-card">
       <ng-container *ngIf="role === 'JOB_SEEKER'">
         <h3 class="section-title">Job Seeker Details</h3>
+
         <div class="form-group">
           <label>Education Level</label>
           <div class="education-level-buttons">
@@ -27,10 +28,12 @@
             </button>
           </div>
         </div>
+
         <div class="form-group">
           <label for="experience_years">Experience Years</label>
           <p-inputNumber formControlName="experience_years" inputId="experience_years"></p-inputNumber>
         </div>
+
         <div class="form-group">
           <label>Skills</label>
           <div class="skills-checkbox-scroll">

@@ -14,5 +14,8 @@ public class ProfileResponse {
     private String lastName;
     private String username;
     private String role;
-    private List<String> skills;
+    private List<UUID> skills;
+    private String educationLevel;
+    private Integer experienceYears;
+    private UUID companyId;
 }

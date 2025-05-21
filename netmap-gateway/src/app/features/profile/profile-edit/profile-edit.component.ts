@@ -30,6 +30,7 @@ export class ProfileEditComponent implements OnInit {
   role: string = localStorage.getItem('role') || '';
   skills: any[] = [];
   companies: any[] = [];
+  isPatched: boolean = false;
 
   educationLevels = [
     'PRIMARY',
@@ -40,8 +41,7 @@ export class ProfileEditComponent implements OnInit {
     'PHD'
   ];
 
-  constructor(private fb: FormBuilder, private api: ApiService, private router: Router) {
-  }
+  constructor(private fb: FormBuilder, private api: ApiService, private router: Router) {}
 
   ngOnInit(): void {
     this.form = this.fb.group({
@@ -53,24 +53,37 @@ export class ProfileEditComponent implements OnInit {
       company_id: [null]
     });
 
-    this.api.getAllSkills().subscribe((res) => this.skills = res);
-    this.api.getAllCompanies().subscribe((res) => this.companies = res);
+    this.api.getAllSkills().subscribe((res) => {
+      this.skills = res.map((s: any) => ({
+        id: s.id,
+        name: s.name
+      }));
+    });
 
     const userId = localStorage.getItem('user_id');
-    if (userId) {
-      this.api.getProfile(userId).subscribe((profile) => {
-        const patched = {
-          first_name: profile.first_name || '',
-          last_name: profile.last_name || '',
-          skills: profile.skills || [],
-          experience_years: profile.experience_years ?? null,
-          education_level: profile.education_level || '',
-          company_id: profile.company_id ?? null
-        };
+    if (!userId) return;
 
+    this.api.getProfile(userId).subscribe((profile) => {
+      const patched = {
+        first_name: profile.first_name || '',
+        last_name: profile.last_name || '',
+        skills: profile.skills || [],
+        experience_years: profile.experience_years ?? null,
+        education_level: profile.education_level || '',
+        company_id: profile.company_id ?? null
+      };
+
+      if (this.role === 'EMPLOYER') {
+        this.api.getAllCompanies().subscribe((companies) => {
+          this.companies = companies;
+          this.form.patchValue(patched);
+          this.isPatched = true;
+        });
+      } else {
         this.form.patchValue(patched);
-      });
-    }
+        this.isPatched = true;
+      }
+    });
   }
 
   onSubmit() {
@@ -99,6 +112,7 @@ export class ProfileEditComponent implements OnInit {
       }
     });
   }
+
   selectEducationLevel(level: string) {
     this.form.get('education_level')?.setValue(level);
   }
@@ -113,5 +127,4 @@ export class ProfileEditComponent implements OnInit {
 
     this.form.get('skills')?.setValue(updatedSkills);
   }
-
 }

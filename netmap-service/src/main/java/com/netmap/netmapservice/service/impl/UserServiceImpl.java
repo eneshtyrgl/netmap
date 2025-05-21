@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -40,15 +39,31 @@ public class UserServiceImpl implements UserService {
         AppUser user = appUserRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<String> skillNames = List.of();
+        List<UUID> skillIds = List.of();
+        String educationLevel = null;
+        Integer experienceYears = null;
+        UUID companyId = null;
 
         if (user.getRole().name().equals("JOB_SEEKER")) {
             JobSeeker jobSeeker = jobSeekerRepository.findByAppUserId(userId)
                     .orElseThrow(() -> new RuntimeException("Job seeker not found"));
 
-            skillNames = jobSeeker.getSkills().stream()
-                    .map(Skill::getName)
-                    .collect(Collectors.toList());
+            skillIds = jobSeeker.getSkills().stream()
+                    .map(Skill::getId)
+                    .toList();
+
+            educationLevel = jobSeeker.getEducationLevel() != null
+                    ? jobSeeker.getEducationLevel().name()
+                    : null;
+
+            experienceYears = jobSeeker.getExperienceYears();
+        } else if (user.getRole().name().equals("EMPLOYER")) {
+            Employer employer = employerRepository.findByAppUserId(userId)
+                    .orElseThrow(() -> new RuntimeException("Employer not found"));
+
+            if (employer.getCompany() != null) {
+                companyId = employer.getCompany().getId();
+            }
         }
 
         return new ProfileResponse(
@@ -57,9 +72,13 @@ public class UserServiceImpl implements UserService {
                 user.getLastName(),
                 user.getUsername(),
                 user.getRole().name(),
-                skillNames
+                skillIds,
+                educationLevel,
+                experienceYears,
+                companyId
         );
     }
+
 
     @Override
     @Transactional
