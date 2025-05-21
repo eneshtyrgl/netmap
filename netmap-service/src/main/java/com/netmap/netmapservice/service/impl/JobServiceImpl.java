@@ -11,9 +11,11 @@ import com.netmap.netmapservice.service.JobService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.netmap.netmapservice.model.Role;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -66,9 +68,43 @@ public class JobServiceImpl implements JobService {
     }
 
     @Override
+    @Transactional
+    public void deleteJob(UUID jobId, UUID userId) {
+        JobPosting job = jobPostingRepository.findById(jobId)
+                .orElseThrow(() -> new RuntimeException("Job not found"));
+
+        Optional<AppUser> userOpt = appUserRepository.findById(userId);
+
+        if (userOpt.isEmpty()) {
+            jobPostingRepository.delete(job);
+            return;
+        }
+
+        AppUser user = userOpt.get();
+
+        if (user.getRole() == Role.ADMIN ||
+                (user.getRole() == Role.EMPLOYER && job.getEmployer().getAppUser().getId().equals(userId))) {
+            jobPostingRepository.delete(job);
+        } else {
+            throw new RuntimeException("Unauthorized to delete this job");
+        }
+    }
+
+
+
+    @Override
     public List<JobPostResponse> getJobsForUser(UUID userId) {
-        AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        Optional<AppUser> userOpt = appUserRepository.findById(userId);
+
+
+        if (userOpt.isEmpty()) {
+            return jobPostingRepository.findAll()
+                    .stream()
+                    .map(JobPostResponse::new)
+                    .collect(Collectors.toList());
+        }
+
+        AppUser user = userOpt.get();
 
         List<JobPosting> jobs = switch (user.getRole()) {
             case ADMIN -> jobPostingRepository.findAll();
@@ -76,7 +112,9 @@ public class JobServiceImpl implements JobService {
             default -> jobPostingRepository.findByVerifiedTrue();
         };
 
-        return jobs.stream().map(JobPostResponse::new).collect(Collectors.toList());
+        return jobs.stream()
+                .map(JobPostResponse::new)
+                .collect(Collectors.toList());
     }
 
     @Override

@@ -41,5 +41,14 @@
         (click)="applyToJob()"
       ></button>
     </div>
+    <button
+      *ngIf="canDelete()"
+      pButton
+      type="button"
+      icon="pi pi-trash"
+      label="Delete"
+      class="p-button-sm p-button-danger"
+      (click)="deleteJob()"
+    ></button>
   </ng-template>
 </p-card>
