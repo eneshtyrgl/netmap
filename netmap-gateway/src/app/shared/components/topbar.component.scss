@@ -54,6 +54,38 @@
       color: #ff0707;
     }
   }
+  .topbar-btn {
+    background: none;
+    border: none;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.95rem;
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+    border-radius: 6px;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #e1eaff;
+      color: #2c7be5;
+    }
+  }
+
+  .user-menu button {
+    background: none;
+    border: none;
+    font-size: 0.95rem;
+    cursor: pointer;
+    color: black;
+    border-radius: 6px;
+    padding: 0.4rem 0.75rem;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background-color: #ffeaea;
+      color: #ff0707;
+    }
+  }
 }
 
 .username-link {

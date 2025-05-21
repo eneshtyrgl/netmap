@@ -23,8 +23,8 @@
   </div>
 
   <div class="right" *ngIf="!isLoggedIn(); else userMenu">
-    <a routerLink="/login">Login</a>
-    <a routerLink="/register">Register</a>
+    <a routerLink="/login" class="topbar-btn">Login</a>
+    <a routerLink="/register" class="topbar-btn">Register</a>
   </div>
 
   <ng-template #userMenu>
