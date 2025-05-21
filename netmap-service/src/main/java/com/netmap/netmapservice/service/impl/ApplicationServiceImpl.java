@@ -28,12 +28,17 @@ public class ApplicationServiceImpl implements ApplicationService {
 
     @Override
     @Transactional
-    public void applyToJob(UUID jobSeekerId, UUID jobPostingId) {
-        JobSeeker jobSeeker = jobSeekerRepository.findById(jobSeekerId)
+    public boolean applyToJob(UUID appUserId, UUID jobPostingId) {
+        JobSeeker jobSeeker = jobSeekerRepository.findByAppUserId(appUserId)
                 .orElseThrow(() -> new RuntimeException("Job seeker not found"));
 
         JobPosting jobPosting = jobPostingRepository.findById(jobPostingId)
                 .orElseThrow(() -> new RuntimeException("Job posting not found"));
+
+        boolean alreadyExists = jobApplicationRepository.existsByJobSeekerAndJobPosting(jobSeeker, jobPosting);
+        if (alreadyExists) {
+            return false;
+        }
 
         JobApplication application = new JobApplication();
         application.setJobSeeker(jobSeeker);
@@ -42,6 +47,7 @@ public class ApplicationServiceImpl implements ApplicationService {
         application.setStatus(ApplicationStatus.PENDING);
 
         jobApplicationRepository.save(application);
+        return true;
     }
 
     @Override
