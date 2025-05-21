@@ -1,6 +1,20 @@
 <div class="jobs-container">
   <app-jobs-sidebar (filterChange)="onFilterChange($event)" />
-  <div class="job-cards">
-    <app-job-card *ngFor="let job of jobs" [job]="job" />
+
+  <div class="jobs-content">
+    <div class="search-bar">
+      <input
+        type="text"
+        pInputText
+        placeholder="Search by title or company..."
+        [(ngModel)]="searchTerm"
+        (ngModelChange)="filterJobsBySearch()"
+        class="search-input"
+      />
+    </div>
+
+    <div class="job-cards">
+      <app-job-card *ngFor="let job of filteredJobs" [job]="job" />
+    </div>
   </div>
 </div>
