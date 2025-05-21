@@ -4,6 +4,9 @@
   width: 260px;
   padding: 1.5rem;
   background-color: #eaf4fc;
+  position: sticky;
+  top: 0;
+  z-index: 10;
   border-right: 1px solid #ccc;
   min-height: 100vh;
   font-family: 'Segoe UI', sans-serif;
