@@ -48,5 +48,10 @@ export class ApiService {
   applyToJob(data: { user_id: string, job_posting_id: string }) {
     return this.http.post(`${this.BASE_URL}/applications`, data);
   }
+  deleteJob(jobId: string, userId: string) {
+    return this.http.delete(`${this.BASE_URL}/jobs/${jobId}`, {
+      headers: { 'X-User-Id': userId }
+    });
+  }
 
 }

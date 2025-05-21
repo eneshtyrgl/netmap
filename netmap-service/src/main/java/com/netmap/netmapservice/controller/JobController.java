@@ -32,15 +32,30 @@ public class JobController {
         JobPostResponse response = jobService.createJob(employerId, request);
         return ResponseEntity.ok(response);
     }
+    @DeleteMapping("/{jobId}")
+    @PreAuthorize("hasRole('EMPLOYER') or hasRole('ADMIN')")
+    public ResponseEntity<Void> deleteJob(@PathVariable UUID jobId,
+                                          @RequestHeader("X-User-Id") UUID userId) {
+        jobService.deleteJob(jobId, userId);
+        return ResponseEntity.noContent().build();
+    }
+
 
     @GetMapping
     public ResponseEntity<List<JobPostResponse>> listJobs() {
-        CustomPrincipal principal = (CustomPrincipal) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UUID userId = principal.getUserId();
-        return ResponseEntity.ok(jobService.getJobsForUser(userId));
+        var auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth != null && auth.getPrincipal() instanceof CustomPrincipal principal) {
+            UUID userId = principal.getUserId();
+            return ResponseEntity.ok(jobService.getJobsForUser(userId));
+        } else {
+            return ResponseEntity.ok(jobService.getJobsForUser(null));
+        }
     }
+
     @PostMapping("/filter")
     public ResponseEntity<List<JobSummaryResponse>> filterJobs(@RequestBody FilterJobRequest request) {
         return ResponseEntity.ok(jobService.filterJobs(request));
     }
+
+
 }

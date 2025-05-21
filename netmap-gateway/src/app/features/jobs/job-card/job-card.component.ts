@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { JobPosting } from '../../../models/job-posting.model';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
-import { HttpClient } from '@angular/common/http';
 import { Chip } from 'primeng/chip';
 import { Router } from '@angular/router';
 import { ApiService } from '../../../shared/services/api.service';
@@ -18,15 +17,18 @@ import { ApiService } from '../../../shared/services/api.service';
 export class JobCardComponent implements OnInit {
   @Input() job!: JobPosting;
   cityName: string = '';
+  userId: string | null = null;
+  userRole: string | null = null;
 
   constructor(
-    private http: HttpClient,
     private api: ApiService,
     private router: Router
   ) {}
 
   ngOnInit(): void {
     this.getCityName(this.job.latitude, this.job.longitude);
+    this.userId = localStorage.getItem('user_id');
+    this.userRole = localStorage.getItem('role');
   }
 
   private getCityName(lat: number, lon: number): void {
@@ -47,20 +49,19 @@ export class JobCardComponent implements OnInit {
     this.cityName = 'Unknown';
   }
 
-  applyToJob() {
-    const userId = localStorage.getItem('user_id');
-    if (!userId) {
+  applyToJob(): void {
+    if (!this.userId) {
       alert('You must be logged in to apply!');
       this.router.navigate(['/login']);
       return;
     }
 
     const payload = {
-      user_id: userId,
+      user_id: this.userId,
       job_posting_id: this.job.id
     };
 
-    this.api.post('/applications', payload).subscribe({
+    this.api.applyToJob(payload).subscribe({
       next: () => alert('Application submitted successfully!'),
       error: (err) => {
         if (err.status === 409) {
@@ -72,4 +73,30 @@ export class JobCardComponent implements OnInit {
       }
     });
   }
+
+  canDelete(): boolean {
+    return this.userRole === 'EMPLOYER' || this.userRole === 'ADMIN';
+  }
+
+  deleteJob(): void {
+    if (!this.userId) {
+      alert('Unauthorized');
+      return;
+    }
+
+    const confirmDelete = confirm('Are you sure you want to delete this job posting?');
+    if (!confirmDelete) return;
+
+    this.api.deleteJob(this.job.id, this.userId).subscribe({
+      next: () => {
+        alert('Job deleted successfully.');
+        window.location.reload(); // İsteğe bağlı: sayfayı yenile
+      },
+      error: (err) => {
+        alert('Failed to delete job.');
+        console.error(err);
+      }
+    });
+  }
 }
+

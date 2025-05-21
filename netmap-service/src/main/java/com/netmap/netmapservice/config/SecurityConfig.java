@@ -25,19 +25,20 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .securityMatcher("/**")
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                                 "/auth/register",
                                 "/auth/login",
                                 "/admin/login",
-                                "/skills"
+                                "/skills",
+                                "/map",
+                                "/map/**"
                         ).permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/jobs/**").hasAnyRole("ADMIN", "EMPLOYER", "JOB_SEEKER")
                         .requestMatchers("/companies").hasAnyRole("EMPLOYER", "ADMIN")
                         .requestMatchers("/users/**").hasAnyRole("JOB_SEEKER", "EMPLOYER", "ADMIN")
-                        .requestMatchers("/applications").hasAnyRole("JOB_SEEKER")
+                        .requestMatchers("/applications").hasRole("JOB_SEEKER")
                         .anyRequest().authenticated()
                 )
                 .csrf(AbstractHttpConfigurer::disable)

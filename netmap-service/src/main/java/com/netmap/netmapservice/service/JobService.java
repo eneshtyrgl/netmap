@@ -10,6 +10,7 @@ import java.util.UUID;
 
 public interface JobService {
     JobPostResponse createJob(UUID employerId, CreateJobRequest request);
+    void deleteJob(UUID jobId, UUID userId);
     List<JobPostResponse> getJobsForUser(UUID userId);
 
     List<JobPostResponse> getUnverifiedJobs();
