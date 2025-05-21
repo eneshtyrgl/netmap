@@ -1,15 +1,17 @@
 package com.netmap.netmapservice.controller;
 
+import com.netmap.netmapservice.domain.request.ApplyJobRequest;
 import com.netmap.netmapservice.domain.response.ApplicationResponse;
 import com.netmap.netmapservice.domain.response.ApplicationSummaryResponse;
 import com.netmap.netmapservice.service.ApplicationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.UUID;
-
 
 @RestController
 @RequestMapping("/applications")
@@ -18,10 +20,13 @@ public class ApplicationController {
 
     private final ApplicationService applicationService;
 
+    @PreAuthorize("hasRole('JOB_SEEKER')")
     @PostMapping
-    public ResponseEntity<Void> apply(@RequestParam UUID jobSeekerId,
-                                      @RequestParam UUID jobPostingId) {
-        applicationService.applyToJob(jobSeekerId, jobPostingId);
+    public ResponseEntity<Void> apply(@RequestBody ApplyJobRequest request) {
+        boolean success = applicationService.applyToJob(request.getUserId(), request.getJobPostingId());
+        if (!success) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
         return ResponseEntity.ok().build();
     }
 

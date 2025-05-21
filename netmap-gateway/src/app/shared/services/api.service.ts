@@ -44,4 +44,9 @@ export class ApiService {
   updateProfile(userId: string, data: any): Observable<any> {
     return this.http.put<any>(`${this.BASE_URL}/users/${userId}`, data);
   }
+
+  applyToJob(data: { user_id: string, job_posting_id: string }) {
+    return this.http.post(`${this.BASE_URL}/applications`, data);
+  }
+
 }

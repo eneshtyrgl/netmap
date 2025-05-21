@@ -23,6 +23,7 @@
 
   <ng-template pTemplate="footer">
     <div class="actions">
+      <!--
       <button
         pButton
         type="button"
@@ -30,13 +31,14 @@
         label="Show on Map"
         class="p-button-sm p-button-text"
       ></button>
-
+      -->
       <button
         pButton
         type="button"
         icon="pi pi-send"
         label="Apply"
         class="p-button-sm p-button-primary"
+        (click)="applyToJob()"
       ></button>
     </div>
   </ng-template>
