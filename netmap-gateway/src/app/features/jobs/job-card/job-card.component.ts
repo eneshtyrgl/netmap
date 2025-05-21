@@ -30,20 +30,21 @@ export class JobCardComponent implements OnInit {
   }
 
   private getCityName(lat: number, lon: number): void {
-    const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
-    this.http.get<any>(url).subscribe({
-      next: (res) => {
-        this.cityName =
-          res.address?.city ||
-          res.address?.town ||
-          res.address?.village ||
-          res.address?.county ||
-          'Unknown';
-      },
-      error: () => {
-        this.cityName = 'Unknown';
-      }
-    });
+// const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`;
+// this.http.get<any>(url).subscribe({
+//   next: (res) => {
+//     this.cityName =
+//       res.address?.city ||
+//       res.address?.town ||
+//       res.address?.village ||
+//       res.address?.county ||
+//       'Unknown';
+//   },
+//   error: () => {
+//     this.cityName = 'Unknown';
+//   }
+// });
+    this.cityName = 'Unknown';
   }
 
   applyToJob() {

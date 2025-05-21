@@ -25,7 +25,8 @@ import { ApiService } from '../../../shared/services/api.service';
 export class JobsSidebarComponent implements OnInit {
   @Output() filterChange = new EventEmitter<any>();
   form: FormGroup;
-  skillsOptions: string[] = [];
+  skillsOptions: { label: string; value: string }[] = [];
+  private initialized = false;
 
   constructor(private fb: FormBuilder, private api: ApiService) {
     this.form = this.fb.group({
@@ -38,17 +39,21 @@ export class JobsSidebarComponent implements OnInit {
 
   ngOnInit(): void {
     this.api.getAllSkills().subscribe((skills: any[]) => {
-      // skills = [{ id, name }]
-      this.skillsOptions = skills;
-      this.emitFilter();
+      console.log('Skills from API:', skills);
+      this.skillsOptions = skills.map(skill => ({
+        label: skill.name,
+        value: skill.id
+      }));
+      this.initialized = true;
     });
+
 
     this.form.valueChanges.pipe(debounceTime(300)).subscribe(() => {
-      this.emitFilter();
+      if (this.initialized) {
+        this.emitFilter();
+      }
     });
   }
-
-
 
   private emitFilter(): void {
     const raw = this.form.value;
